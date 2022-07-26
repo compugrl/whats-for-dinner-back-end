@@ -1,6 +1,6 @@
-# What's For Dinner proxy server
+# What's For Dinner back end
 
-The What's For Dinner is to be used with the [What's For Dinner mobile app project](https://github.com/compugrl/whats-for-dinner)
+The What's For Dinner back end is to be used with the What's For Dinner mobile app project (https://github.com/compugrl/whats-for-dinner-back-end)
 
 ## Quick Start
 
@@ -29,7 +29,7 @@ The What's For Dinner is to be used with the [What's For Dinner mobile app proje
 
 | Route | Query Parameter(s) | Query Parameter(s) Description |
 |--|--|--|
-|`GET` `/recipe`| `q` | Free-form query string to search for. For `What's For Dinner`, this should be the ingredient name. |
+|`GET` `/search`| `q` | Free-form query string to search for. For `What's For Dinner`, this should be the ingredient name. |
 
 
 
