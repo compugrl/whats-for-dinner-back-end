@@ -2,22 +2,11 @@ from flask import Blueprint, request, jsonify, make_response, abort
 from app import db
 from dotenv import load_dotenv
 from app.models.recipe import Recipe
-from ..helpers.helper_functions import validate_recipe
+from ..helpers.helper_functions import validate_recipe, parse_recipe
 
 load_dotenv()
 
 recipe_bp = Blueprint("recipe_bp", __name__, url_prefix="/recipes")
-
-@recipe_bp.route("", methods=["GET"])
-def read_all_recipes():
-    recipes = Recipe.query
-    recipes = recipes.all()
-
-    recipes_response = []
-    for recipe in recipes:
-        recipes_response.append(recipe.to_dict())
-    
-    return jsonify(recipes_response)
 
 @recipe_bp.route("/<recipe_id>", methods=["GET"])
 def get_one_recipe(recipe_id):
@@ -28,7 +17,8 @@ def get_one_recipe(recipe_id):
 @recipe_bp.route("", methods=["POST"])
 def create_recipe():    
     request_body = request.get_json()  
-    new_recipe = Recipe.create(request_body)
+    parsed_recipe = parse_recipe(request_body)
+    new_recipe = Recipe.create(parsed_recipe)
     
     db.session.add(new_recipe)
     db.session.commit()
