@@ -7,8 +7,6 @@ class Recipe(db.Model):
     image_tnail = db.Column(db.String)
     image_sm = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    menu_date = db.Column(db.Date, db.ForeignKey('user.menu_date'))
-    favorite = db.Column(db.Boolean, db.ForeignKey('user.favorite'))
     user = db.relationship("User", back_populates="recipe")
 
     def to_dict(self):

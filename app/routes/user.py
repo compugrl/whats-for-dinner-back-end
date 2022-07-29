@@ -1,11 +1,9 @@
-from flask import Blueprint, request, jsonify, make_response, json
-import requests
+from flask import Blueprint, request, jsonify, make_response
 from app import db
 from dotenv import load_dotenv
 from app.models.user import User
 from .recipe import create_recipe
 from ..helpers.helper_functions import validate_user, validate_recipe
-from datetime import datetime
 
 load_dotenv()
 
@@ -66,7 +64,7 @@ def edit_user(user_id):
     if "days_to_display" in request_body:
         user.days_to_display = request_body["days_to_display"]  
     if "menu_date" in request_body:
-        user.menu_date = request_body["menu_date"]  
+        user.menu_date = request_body["menu_date"]
     if "favorite" in request_body:
         user.favorite = request_body["favorite"]   
     db.session.commit()
@@ -82,7 +80,7 @@ def add_recipe_to_user(user_id, recipe_id):
     recipes_list = []    
     recipe.user = user 
     if "menu_date" in request_body:
-        user.menu_date = request_body["menu_date"]  
+        user.menu_date = request_body["menu_date"]
     if "favorite" in request_body:
         user.favorite = request_body["favorite"]
     recipes_list.append(recipe.recipe_id)
@@ -103,9 +101,15 @@ def add_recipe_to_user(user_id, recipe_id):
 
 @user_bp.route("/<user_id>/recipes", methods=["GET"])
 def get_recipes_per_user(user_id):
-
     user = validate_user(user_id)
-    recipes_info = [recipe.to_dict() for recipe in user.recipe]
+    date_param = request.args.get("menu_date")
+
+    if date_param:     
+        user = User.query.get(user.menu_date==date_param)
+        if not user.recipe:
+            return {"warning": "no recipe for date"}           
+        else:
+            recipes_info = [recipe.to_dict() for recipe in user.recipe]            
 
     db.session.commit()
 

@@ -8,6 +8,15 @@ load_dotenv()
 
 recipe_bp = Blueprint("recipe_bp", __name__, url_prefix="/recipes")
 
+@recipe_bp.route("", methods=["GET"])
+# Not used in code but needed for testing purposes
+def get_all_recipes():
+    recipes_response = []
+    recipes = Recipe.query.all()
+    recipes_response = [recipe.to_dict() for recipe in recipes]
+
+    return jsonify(recipes_response)
+
 @recipe_bp.route("/<recipe_id>", methods=["GET"])
 def get_one_recipe(recipe_id):
     recipe = validate_recipe(recipe_id)
@@ -17,8 +26,7 @@ def get_one_recipe(recipe_id):
 @recipe_bp.route("", methods=["POST"])
 def create_recipe():    
     request_body = request.get_json()  
-    parsed_recipe = parse_recipe(request_body)
-    new_recipe = Recipe.create(parsed_recipe)
+    new_recipe = Recipe.create(request_body)
     
     db.session.add(new_recipe)
     db.session.commit()

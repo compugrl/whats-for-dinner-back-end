@@ -5,7 +5,7 @@ class User(db.Model):
     name= db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     days_to_display = db.Column(db.Integer, nullable=False)
-    menu_date = db.Column(db.Date)
+    menu_date = db.Column(db.String)
     favorite = db.Column(db.Boolean)
     recipe = db.relationship('Recipe', back_populates="user", lazy=True)
     shopping_list = db.relationship('Shopping_list', back_populates="user", lazy=True)
@@ -27,6 +27,4 @@ class User(db.Model):
             name=data_dict["name"],
             email=data_dict["email"],
             days_to_display=data_dict["days_to_display"],
-            menu_date=data_dict["menu_date"],
-            favorite=data_dict["favorite"]
             )
