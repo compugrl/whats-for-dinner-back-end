@@ -22,8 +22,7 @@ def get_all_users():
 
 @user_bp.route("/<user_id>", methods=["GET"])
 def get_one_user(user_id):
-    user = validate_user(user_id)
-    
+    user = validate_user(user_id)    
     return {"user": user.to_dict()}
 
 @user_bp.route("", methods=["POST"])
@@ -103,13 +102,23 @@ def add_recipe_to_user(user_id, recipe_id):
 def get_recipes_per_user(user_id):
     user = validate_user(user_id)
     date_param = request.args.get("menu_date")
+    fave_param = request.args.get("favorite")
 
     if date_param:     
-        user = User.query.get(user.menu_date==date_param)
-        if not user.recipe:
-            return {"warning": "no recipe for date"}           
+        user = User.query.filter(user.menu_date==date_param).first()
+        if user == None:
+            return {"warning": f"no recipe for {date_param}"}           
         else:
-            recipes_info = [recipe.to_dict() for recipe in user.recipe]            
+            recipes_info = [recipe.to_dict() for recipe in user.recipe]   
+
+    if fave_param:     
+        user = User.query.filter(user.favorite==True).first()
+        
+        if user == None:
+            return {"warning": "no favorite recipes"}           
+        else:
+            user_list = User.query.filter(user.favorite==True).all()
+            recipes_info = [recipe.to_dict() for recipe in user_list]         
 
     db.session.commit()
 
