@@ -2,8 +2,9 @@ from flask import Blueprint, request, jsonify, make_response
 from app import db
 from dotenv import load_dotenv
 from app.models.user import User
-from .recipe import create_recipe
+from app.models.recipe import Recipe
 from ..helpers.helper_functions import validate_user, validate_recipe
+from sqlalchemy import and_
 
 load_dotenv()
 
@@ -62,27 +63,21 @@ def edit_user(user_id):
         user.email = request_body["email"]
     if "days_to_display" in request_body:
         user.days_to_display = request_body["days_to_display"]  
-    if "menu_date" in request_body:
-        user.menu_date = request_body["menu_date"]
-    if "favorite" in request_body:
-        user.favorite = request_body["favorite"]   
     db.session.commit()
 
     return {"updated user": user.to_dict()}
 
-@user_bp.route("/<user_id>/recipe/<recipe_id>", methods=["PATCH"])
-def add_recipe_to_user(user_id, recipe_id):
+@user_bp.route("/<user_id>/recipe/<id>", methods=["PATCH"])
+def add_recipe_to_user(user_id, id):
     user = validate_user(user_id) 
-    recipe = validate_recipe(recipe_id)            
+    recipe = validate_recipe(id)            
     request_body = request.get_json()      
 
-    recipes_list = []    
     recipe.user = user 
     if "menu_date" in request_body:
-        user.menu_date = request_body["menu_date"]
+        recipe.menu_date = request_body["menu_date"]
     if "favorite" in request_body:
-        user.favorite = request_body["favorite"]
-    recipes_list.append(recipe.recipe_id)
+        recipe.favorite = request_body["favorite"]
 
     db.session.commit()
 
@@ -91,35 +86,9 @@ def add_recipe_to_user(user_id, recipe_id):
         "name": user.name,
         "email": user.email,
         "days_to_display": user.days_to_display,
-        "recipe_id": recipe_id,
-        "menu_date": user.menu_date,
-        "favorite": user.favorite
+        "id": id,
+        "menu_date": recipe.menu_date,
+        "favorite": recipe.favorite
     }
 
     return make_response(jsonify(updatedUser)), 200
-
-@user_bp.route("/<user_id>/recipes", methods=["GET"])
-def get_recipes_per_user(user_id):
-    user = validate_user(user_id)
-    date_param = request.args.get("menu_date")
-    fave_param = request.args.get("favorite")
-
-    if date_param:     
-        user = User.query.filter(user.menu_date==date_param).first()
-        if user == None:
-            return {"warning": f"no recipe for {date_param}"}           
-        else:
-            recipes_info = [recipe.to_dict() for recipe in user.recipe]   
-
-    if fave_param:     
-        user = User.query.filter(user.favorite==True).first()
-        
-        if user == None:
-            return {"warning": "no favorite recipes"}           
-        else:
-            user_list = User.query.filter(user.favorite==True).all()
-            recipes_info = [recipe.to_dict() for recipe in user_list]         
-
-    db.session.commit()
-
-    return make_response(jsonify(recipes_info)), 200

@@ -4,9 +4,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name= db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
-    days_to_display = db.Column(db.Integer, nullable=False)
-    menu_date = db.Column(db.String)
-    favorite = db.Column(db.Boolean)
+    days_to_display = db.Column(db.Integer, nullable=False)    
     recipe = db.relationship('Recipe', back_populates="user", lazy=True)
     shopping_list = db.relationship('Shopping_list', back_populates="user", lazy=True)
 
@@ -16,8 +14,6 @@ class User(db.Model):
             "name": self.name,
             "email": self.email,
             "days_to_display": self.days_to_display,
-            "menu_date": self.menu_date,
-            "favorite": self.favorite
             }
         return response
 

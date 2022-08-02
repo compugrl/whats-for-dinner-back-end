@@ -41,6 +41,13 @@ def to_dict(recipe):
         }
     return response
 
+def user_recipe_to_dict(user):
+    for recipe in user:
+        user_recipe = {
+            "id": id
+        }
+    return user_recipe
+
 def validate_user(user_id):
     try:
         user_id = int(user_id)
@@ -54,16 +61,16 @@ def validate_user(user_id):
     
     return user
 
-def validate_recipe(recipe_id):
+def validate_recipe(id):
     try:
-        recipe_id = int(recipe_id)
+        id = int(id)
     except ValueError:
-        abort(make_response(jsonify({'error': f'Invalid recipe id: {recipe_id}'}), 400))
+        abort(make_response(jsonify({'error': f'Invalid recipe id: {id}'}), 400))
 
-    recipe = Recipe.query.get(recipe_id)
+    recipe = Recipe.query.get(id)
 
     if not recipe:
-        return abort(make_response(jsonify(f"Recipe {recipe_id} not found"), 404))
+        return abort(make_response(jsonify(f"Recipe {id} not found"), 404))
     
     return recipe
 
