@@ -65,25 +65,11 @@ def get_recipe():
             cuisine_lbl = 'cuisines'
             params[cuisine_lbl] = cuisine_val
 
-    response = requests.get(
+    # response = requests.get(
+    first_response = requests.get(
         "https://api.edamam.com/api/recipes/v2",
         params
     )    
-    return make_response(jsonify(response.json())), 200
 
-@edamam_bp.route("/<hash>", methods=["GET"])
-def get_one_recipe(hash):
-    params = {
-        "app_key": recipe_key, 
-        "app_id": recipe_app, 
-        "type": "public",  
-        "format": "json",
-        }
-
-    url = f'https://api.edamam.com/api/recipes/v2/{hash}'
-
-    response = requests.get(
-        url,
-        params
-    )
-    return jsonify(response.json())
+    response = parse_recipe(first_response)
+    return make_response(jsonify(response)), 200

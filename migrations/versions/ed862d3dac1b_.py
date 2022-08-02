@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c71cc88ed4d5
+Revision ID: ed862d3dac1b
 Revises: 
-Create Date: 2022-07-28 16:41:46.812494
+Create Date: 2022-08-02 08:28:51.092485
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c71cc88ed4d5'
+revision = 'ed862d3dac1b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,14 +28,14 @@ def upgrade():
     sa.PrimaryKeyConstraint('user_id')
     )
     op.create_table('recipe',
-    sa.Column('recipe_id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('hash', sa.String(), nullable=False),
+    sa.Column('shareAs', sa.String(), nullable=False),
     sa.Column('label', sa.String(), nullable=False),
-    sa.Column('image_tnail', sa.String(), nullable=True),
-    sa.Column('image_sm', sa.String(), nullable=True),
+    sa.Column('image_url', sa.String(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
-    sa.PrimaryKeyConstraint('recipe_id')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('shopping_list',
     sa.Column('id', sa.Integer(), nullable=False),

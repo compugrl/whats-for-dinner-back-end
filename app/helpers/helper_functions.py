@@ -5,20 +5,22 @@ from app.models.shopping_list import Shopping_list
 
 def parse_recipe(input_data):
     recipe_dict = {}
-    label = input_data["recipe"]["label"]
+    input_data = input_data.json()
+    hits = input_data["hits"]
 
-    uri = input_data["recipe"]["uri"]
-    start_pos = uri.find("#") + 8
-    hash = uri[start_pos::]
-    
-    image_tnail = input_data["recipe"]["images"]["THUMBNAIL"]["url"]
-    image_sm = input_data["recipe"]["images"]["SMALL"]["url"]
+    for hit in hits:
+        label = hit["recipe"]["label"]    
+        image_url = hit["recipe"]["image"]
+        shareAs = hit["recipe"]["shareAs"]
+        uri = hit["recipe"]["uri"]
+        start_pos = uri.find("#") + 8
+        hash = uri[start_pos::]
 
-    recipe_dict[hash] = {
-        "label": label,
-        "image_tnail": image_tnail,
-        "image_sm": image_sm,
-    }
+        recipe_dict[hash] = {
+            "label": label,
+            "image_url": image_url,
+            "shareAs": shareAs,
+        }
 
     return recipe_dict
 
@@ -30,6 +32,14 @@ def parse_ingredients(input_data):
         ingredient_list.append(food)
 
     return ingredient_list
+
+def to_dict(recipe):
+    response = {
+        "shareAs": recipe.shareAs,
+        "label": recipe.label,
+        "image_url": recipe.image_url
+        }
+    return response
 
 def validate_user(user_id):
     try:
