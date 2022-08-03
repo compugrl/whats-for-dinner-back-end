@@ -4,25 +4,29 @@ from app.models.recipe import Recipe
 from app.models.shopping_list import Shopping_list
 
 def parse_recipe(input_data):
+    recipe_list = []
     recipe_dict = {}
     input_data = input_data.json()
     hits = input_data["hits"]
 
     for hit in hits:
-        label = hit["recipe"]["label"]    
+        label = hit["recipe"]["label"]
         image_url = hit["recipe"]["image"]
         shareAs = hit["recipe"]["shareAs"]
+
         uri = hit["recipe"]["uri"]
         start_pos = uri.find("#") + 8
         hash = uri[start_pos::]
 
-        recipe_dict[hash] = {
+        recipe_dict = {
+            "hash": hash,
             "label": label,
             "image_url": image_url,
             "shareAs": shareAs,
         }
+        recipe_list.append(recipe_dict)
 
-    return recipe_dict
+    return recipe_list
 
 def parse_ingredients(input_data):
     ingredient_list = []
@@ -32,14 +36,6 @@ def parse_ingredients(input_data):
         ingredient_list.append(food)
 
     return ingredient_list
-
-def to_dict(recipe):
-    response = {
-        "shareAs": recipe.shareAs,
-        "label": recipe.label,
-        "image_url": recipe.image_url
-        }
-    return response
 
 def user_recipe_to_dict(user):
     for recipe in user:
@@ -58,7 +54,7 @@ def validate_user(user_id):
 
     if not user:
         return abort(make_response(jsonify(f"User {user_id} not found"), 404))
-    
+
     return user
 
 def validate_recipe(id):
@@ -71,7 +67,7 @@ def validate_recipe(id):
 
     if not recipe:
         return abort(make_response(jsonify(f"Recipe {id} not found"), 404))
-    
+
     return recipe
 
 def validate_shopping_list(id):

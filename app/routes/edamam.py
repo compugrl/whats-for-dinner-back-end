@@ -15,13 +15,13 @@ recipe_app = os.environ.get("RECIPE_APP")
 @edamam_bp.route("", methods=["GET"])
 def get_recipe():
     params = {
-        "app_key": recipe_key, 
-        "app_id": recipe_app, 
-        "type": "public", 
-        "mealType": "Dinner", 
-        "random": "true", 
+        "app_key": recipe_key,
+        "app_id": recipe_app,
+        "type": "public",
+        "mealType": "Dinner",
+        "random": "true",
         "imageSize": "THUMBNAIL",
-        "imageSize": "REGULAR", 
+        "imageSize": "REGULAR",
         "format": "json",
         }
 
@@ -39,7 +39,7 @@ def get_recipe():
     if ingr_limit:
         params["ingr"] = f'1-{ingr_limit}'
 
-    time = request.args.get("time")    
+    time = request.args.get("time")
     if time:
         params["time"] = time
 
@@ -69,7 +69,7 @@ def get_recipe():
     first_response = requests.get(
         "https://api.edamam.com/api/recipes/v2",
         params
-    )    
+    )
 
     response = parse_recipe(first_response)
     return make_response(jsonify(response)), 200
