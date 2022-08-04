@@ -26,6 +26,7 @@ def create_app(test_config=None):
 
     from app.models.recipe import Recipe
     from app.models.user import User
+    from app.models.user_recipe import UserRecipe
     from app.models.shopping_list import Shopping_list
 
     db.init_app(app)
@@ -34,11 +35,13 @@ def create_app(test_config=None):
     from .routes.edamam import edamam_bp
     from .routes.user import user_bp
     from .routes.recipe import recipe_bp
+    from .routes.user_recipe import ur_bp
     from .routes.shopping_list import shopping_list_bp
 
     app.register_blueprint(edamam_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(recipe_bp)    
+    app.register_blueprint(ur_bp)   
     app.register_blueprint(shopping_list_bp)
 
     return app

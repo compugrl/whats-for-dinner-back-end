@@ -1,19 +1,17 @@
 from app import db
 
 class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name= db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
-    days_to_display = db.Column(db.Integer, nullable=False)    
-    recipe = db.relationship('Recipe', back_populates="user", lazy=True)
+    email = db.Column(db.String, nullable=False)    
+    recipe = db.relationship('Recipe', secondary="user_recipe")
     shopping_list = db.relationship('Shopping_list', back_populates="user", lazy=True)
 
     def to_dict(self):
         response = {
-            "user_id": self.user_id,
+            "uid": self.uid,
             "name": self.name,
             "email": self.email,
-            "days_to_display": self.days_to_display,
             }
         return response
 
@@ -22,5 +20,4 @@ class User(db.Model):
         return cls(
             name=data_dict["name"],
             email=data_dict["email"],
-            days_to_display=data_dict["days_to_display"],
             )

@@ -19,9 +19,9 @@ def get_all_recipes():
 
     return jsonify(recipes_response)
 
-@recipe_bp.route("/<id>", methods=["GET"])
-def get_one_recipe(id):
-    recipe = validate_recipe(id)
+@recipe_bp.route("/<rhash>", methods=["GET"])
+def get_one_recipe(rhash):
+    recipe = validate_recipe(rhash)
 
     return {"recipe": recipe.to_dict()}
 
@@ -35,23 +35,20 @@ def create_recipe():
 
     return make_response(jsonify({"recipe": new_recipe.to_dict()}), 201)
 
-@recipe_bp.route("/<id>/user/<user_id>", methods=["DELETE"])
-def delete_recipe(id, user_id):
-    recipe = validate_recipe(id)
-    user = validate_user(user_id)
+@recipe_bp.route("/<rhash>", methods=["DELETE"])
+def delete_recipe(rhash):
+    recipe = validate_recipe(rhash)
 
     db.session.delete(recipe)
     db.session.commit()
 
     return jsonify({'success': f'Recipe {recipe.label} successfully deleted'})
 
-@recipe_bp.route("/<id>", methods=["PATCH"])
-def edit_recipe(id):
-    recipe = validate_recipe(id)
+@recipe_bp.route("/<rhash>", methods=["PATCH"])
+def edit_recipe(rhash):
+    recipe = validate_recipe(rhash)
     request_body = request.get_json()
 
-    if "hash" in request_body:
-        recipe.hash = request_body["hash"]
     if "label" in request_body:
         recipe.label = request_body["label"]
     if "image_url" in request_body:
@@ -61,26 +58,3 @@ def edit_recipe(id):
     db.session.commit()
 
     return {"updated recipe": recipe.to_dict()}
-
-@recipe_bp.route("/user/<user_id>", methods=["GET"])
-def get_recipes_per_user(user_id):
-    user = validate_user(user_id)
-    params = False
-    date_param = request.args.get("menu_date")
-    fave_param = request.args.get("favorite")
-
-    if date_param:
-        params = True
-        recipes_info = [recipe.to_dict() for recipe in user.recipe if recipe.menu_date == date_param]
-
-    if fave_param:
-        params = True
-        recipes_info = [recipe.to_dict() for recipe in user.recipe if recipe.favorite == True]
-
-
-    if not params:
-        recipes_info = [recipe.to_dict() for recipe in user.recipe]
-
-    db.session.commit()
-
-    return make_response(jsonify(recipes_info)), 200

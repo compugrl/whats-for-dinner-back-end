@@ -2,6 +2,8 @@ from flask import jsonify, make_response, abort
 from app.models.user import User
 from app.models.recipe import Recipe
 from app.models.shopping_list import Shopping_list
+from app.models.user_recipe import UserRecipe
+from sqlalchemy import and_
 
 def parse_recipe(input_data):
     recipe_list = []
@@ -16,10 +18,10 @@ def parse_recipe(input_data):
 
         uri = hit["recipe"]["uri"]
         start_pos = uri.find("#") + 8
-        hash = uri[start_pos::]
+        rhash = uri[start_pos::]
 
         recipe_dict = {
-            "hash": hash,
+            "rhash": rhash,
             "label": label,
             "image_url": image_url,
             "shareAs": shareAs,
@@ -37,36 +39,24 @@ def parse_ingredients(input_data):
 
     return ingredient_list
 
-def user_recipe_to_dict(user):
-    for recipe in user:
-        user_recipe = {
-            "id": id
-        }
-    return user_recipe
-
-def validate_user(user_id):
+def validate_user(uid):
     try:
-        user_id = int(user_id)
+        uid = int(uid)
     except ValueError:
-        abort(make_response(jsonify({'error': f'Invalid user id: {user_id}'}), 400))
+        abort(make_response(jsonify({'error': f'Invalid user id: {uid}'}), 400))
 
-    user = User.query.get(user_id)
+    user = User.query.get(uid)
 
     if not user:
-        return abort(make_response(jsonify(f"User {user_id} not found"), 404))
+        return abort(make_response(jsonify(f"User {uid} not found"), 404))
 
     return user
 
-def validate_recipe(id):
-    try:
-        id = int(id)
-    except ValueError:
-        abort(make_response(jsonify({'error': f'Invalid recipe id: {id}'}), 400))
-
-    recipe = Recipe.query.get(id)
+def validate_recipe(rhash):
+    recipe = Recipe.query.get(rhash)
 
     if not recipe:
-        return abort(make_response(jsonify(f"Recipe {id} not found"), 404))
+        return abort(make_response(jsonify(f"Recipe {rhash} not found"), 404))
 
     return recipe
 
@@ -82,3 +72,11 @@ def validate_shopping_list(id):
         return abort(make_response(jsonify(f"Shopping list item {id} not found"), 404))
 
     return shopping_list
+
+def validate_user_recipe(id):
+    user_recipe = UserRecipe.query.get(id)
+
+    if not user_recipe:
+        return abort(make_response(jsonify(f"User Recipe {id} not found"), 404))
+
+    return user_recipe

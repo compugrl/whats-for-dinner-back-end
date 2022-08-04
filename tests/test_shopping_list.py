@@ -25,7 +25,7 @@ def test_get_list_one_saved_item(client, one_user, one_item):
     assert len(response_body) == 1
     assert response_body == [
         {
-            "user_id": 1,
+            "uid": 1,
             "id": 1,
             "item": "sliced cheese",
             "completed": False
@@ -47,7 +47,7 @@ def test_create_item(client, one_user):
     assert response_body == {
         "shopping_list": {
             "id": 1,
-            "user_id": 1,
+            "uid": 1,
             "item": "blueberries",
             "completed": False
         }
@@ -69,7 +69,7 @@ def test_get_shopping_list_item(client, one_user, one_item):
     assert response_body == {
         "shopping_list": {
             "id": 1,
-            "user_id": 1,
+            "uid": 1,
             "item": "sliced cheese",
             "completed": False
         }
@@ -119,7 +119,7 @@ def test_update_shopping_list_item(client, one_user, one_item):
     assert response.status_code == 200
     assert response_body == {"updated list": {
             "id": 1, 
-            "user_id": 1,
+            "uid": 1,
             "item": "strawberries",
             "completed": False
             }
@@ -137,7 +137,7 @@ def test_update_shopping_list_completed(client, one_user, one_item):
     assert response.status_code == 200
     assert response_body == {"updated list": {
             "id": 1, 
-            "user_id": 1,
+            "uid": 1,
             "item": "sliced cheese",
             "completed": True
             }
