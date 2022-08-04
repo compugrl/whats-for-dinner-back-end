@@ -40,8 +40,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(edamam_bp)
     app.register_blueprint(user_bp)
-    app.register_blueprint(recipe_bp)    
-    app.register_blueprint(ur_bp)   
+    app.register_blueprint(recipe_bp)
+    app.register_blueprint(ur_bp)
     app.register_blueprint(shopping_list_bp)
 
     return app
