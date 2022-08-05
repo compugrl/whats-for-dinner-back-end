@@ -11,7 +11,7 @@ class Shopping_list(db.Model):
         data_dict = {
             "id": self.id,
             "uid": self.uid,
-            "ingredient": self.item,
+            "ingredient": self.ingredient,
             "completed": self.completed
         }
         return data_dict
