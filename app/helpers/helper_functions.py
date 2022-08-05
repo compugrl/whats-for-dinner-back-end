@@ -80,3 +80,19 @@ def validate_user_recipe(id):
         return abort(make_response(jsonify(f"User Recipe {id} not found"), 404))
 
     return user_recipe
+
+def get_menu_items_by_date(menu_date):
+    for i in range(7):        
+        recipe_list = []
+
+        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str))
+
+        db.session.commit()
+
+        recipe_dict = {
+            "id": recipe.id,
+            "menu_date": recipe.menu_date,
+            "rhash": recipe.rhash,
+        }
+        recipe_list.append(recipe_dict)
+    return recipe_list

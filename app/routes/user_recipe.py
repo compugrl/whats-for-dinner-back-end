@@ -18,7 +18,7 @@ def get_all_user_recipes():
     ur_response = []
     for user in user_recipes:
         ur_response.append(user.to_dict())
-    
+
     return jsonify(ur_response)
 
 @ur_bp.route("", methods=["POST"])
@@ -30,7 +30,7 @@ def create_user_recipe():
         uid = request_body["uid"]
 
     if "rhash" not in request_body:
-        return make_response(jsonify(dict("Recipe hash missing")), 400) 
+        return make_response(jsonify(dict("Recipe hash missing")), 400)
     else:
         rhash = request_body["rhash"]
 
@@ -45,9 +45,9 @@ def create_user_recipe():
     return make_response(jsonify({"user_recipe": new_user_recipe.to_dict()}), 201)
 
 @ur_bp.route("/<id>", methods=["PATCH"])
-def update_user_recipe(id):      
-    user_recipe = validate_user_recipe(id)         
-    request_body = request.get_json()      
+def update_user_recipe(id):
+    user_recipe = validate_user_recipe(id)
+    request_body = request.get_json()
 
     date_param = request.args.get("menu_date")
     fave_param = request.args.get("favorite")
@@ -79,7 +79,7 @@ def get_recipes_per_user(uid):
     return make_response(jsonify(recipes_info)), 200
 
 @ur_bp.route("/<id>", methods=["GET"])
-def get_specific_user_recipe(id):    
+def get_specific_user_recipe(id):
     user_recipe = validate_user_recipe(id)
     db.session.commit()
 
@@ -98,7 +98,7 @@ def delete_user_recipe(id):
 def get_user_favorite_recipes(uid):
     recipe_dict = {}
     recipe_list = []
-    user_recipes = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.favorite == True))  
+    user_recipes = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.favorite == True))
 
     for recipe in user_recipes:
         recipe_dict = {
@@ -108,7 +108,7 @@ def get_user_favorite_recipes(uid):
             "rhash": recipe.rhash,
             "uid": recipe.uid
         }
-        
+
         recipe_list.append(recipe_dict)
     db.session.commit()
 
@@ -117,19 +117,6 @@ def get_user_favorite_recipes(uid):
 @ur_bp.route("/user/<uid>/date", methods=["GET"])
 def get_user_menu_items(uid):
     date_str = request.args.get("menu_date")
-    recipe_list = []
-        
-    user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str))  
-
-    db.session.commit()
-
-    for recipe in user_recipe:
-        recipe_dict = {
-            "id": recipe.id,
-            "menu_date": recipe.menu_date,
-            "rhash": recipe.rhash,
-        }
-        recipe_list.append(recipe_dict)
-        
+    get_menu_items_by_date(menu_date)        
 
     return make_response(jsonify(recipe_list)), 200
