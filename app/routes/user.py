@@ -58,7 +58,7 @@ def edit_user(uid):
     request_body = request.get_json()
 
     if "uid" in request_body:
-        user.name = request_body["uid"]        
+        user.uid = request_body["uid"]        
     if "name" in request_body:
         user.name = request_body["name"]        
     if "email" in request_body:
