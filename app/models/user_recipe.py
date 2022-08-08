@@ -3,7 +3,7 @@ from sqlalchemy.orm import backref
 
 class UserRecipe(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    uid = db.Column(db.Integer, db.ForeignKey('user.uid'))
+    uid = db.Column(db.String, db.ForeignKey('user.uid'))
     rhash = db.Column(db.String, db.ForeignKey('recipe.rhash'))
     menu_date = db.Column(db.String)
     favorite = db.Column(db.Boolean)

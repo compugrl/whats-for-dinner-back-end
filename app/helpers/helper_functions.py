@@ -3,6 +3,7 @@ from app.models.user import User
 from app.models.recipe import Recipe
 from app.models.shopping_list import Shopping_list
 from app.models.user_recipe import UserRecipe
+from app import db
 from sqlalchemy import and_
 
 def parse_recipe(input_data):
@@ -40,11 +41,6 @@ def parse_ingredients(input_data):
     return ingredient_list
 
 def validate_user(uid):
-    try:
-        uid = int(uid)
-    except ValueError:
-        abort(make_response(jsonify({'error': f'Invalid user id: {uid}'}), 400))
-
     user = User.query.get(uid)
 
     if not user:
@@ -69,7 +65,7 @@ def validate_shopping_list(id):
     shopping_list = Shopping_list.query.get(id)
 
     if not shopping_list:
-        return abort(make_response(jsonify(f"Shopping list item {id} not found"), 404))
+        return abort(make_response(jsonify(f"Shopping list ingredient {id} not found"), 404))
 
     return shopping_list
 
@@ -80,19 +76,3 @@ def validate_user_recipe(id):
         return abort(make_response(jsonify(f"User Recipe {id} not found"), 404))
 
     return user_recipe
-
-def get_menu_items_by_date(menu_date):
-    for i in range(7):        
-        recipe_list = []
-
-        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str))
-
-        db.session.commit()
-
-        recipe_dict = {
-            "id": recipe.id,
-            "menu_date": recipe.menu_date,
-            "rhash": recipe.rhash,
-        }
-        recipe_list.append(recipe_dict)
-    return recipe_list

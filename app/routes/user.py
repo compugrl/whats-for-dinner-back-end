@@ -29,6 +29,8 @@ def get_one_user(uid):
 @user_bp.route("", methods=["POST"])
 def create_user():
     request_body = request.get_json()
+    if "uid" not in request_body:
+        return make_response(jsonify(dict("User must have a id")), 400)
     if "name" not in request_body:
         return make_response(jsonify(dict("User must have a name")), 400)
     if "email" not in request_body:

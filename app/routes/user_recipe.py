@@ -49,14 +49,10 @@ def update_user_recipe(id):
     user_recipe = validate_user_recipe(id)
     request_body = request.get_json()
 
-    date_param = request.args.get("menu_date")
-    fave_param = request.args.get("favorite")
-
-    if date_param:
-        user_recipe.menu_date = date_param
-    if fave_param:
-        user_recipe.favorite = fave_param
-
+    if "favorite" in request_body:
+        user_recipe.favorite = request_body["favorite"]        
+    if "menu_date" in request_body:
+        user_recipe.menu_date = request_body["menu_date"]  
     db.session.commit()
 
     updatedUserRecipe = {
@@ -104,7 +100,6 @@ def get_user_favorite_recipes(uid):
         recipe_dict = {
             "favorite": recipe.favorite,
             "id": recipe.id,
-            "menu_date": recipe.menu_date,
             "rhash": recipe.rhash,
             "uid": recipe.uid
         }
@@ -116,7 +111,29 @@ def get_user_favorite_recipes(uid):
 
 @ur_bp.route("/user/<uid>/date", methods=["GET"])
 def get_user_menu_items(uid):
-    date_str = request.args.get("menu_date")
-    get_menu_items_by_date(menu_date)        
+    user_recipe_dict = {}
+    recipe_list = []
+    start_date = request.args.get("start_date")
+    date_str = start_date
+
+    for i in range(7):  
+        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str)).first()
+
+        if user_recipe:
+            user_recipe_dict = {
+            "id": user_recipe.id,
+            "menu_date": user_recipe.menu_date,
+            "rhash": user_recipe.rhash,
+            } 
+        else: 
+            user_recipe_dict = {}
+        recipe_list.append(user_recipe_dict)
+
+        date_dt = datetime.strptime(date_str, '%b %d %Y')
+        nxt_day = date_dt + timedelta(days = 1)
+        date_str = nxt_day.strftime('%b %d %Y')
+
+
+    db.session.commit()
 
     return make_response(jsonify(recipe_list)), 200

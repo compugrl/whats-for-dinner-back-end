@@ -1,7 +1,7 @@
 from app import db
 
 class User(db.Model):
-    uid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.String, primary_key=True)
     name= db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)    
     recipe = db.relationship('Recipe', secondary="user_recipe")
@@ -18,6 +18,7 @@ class User(db.Model):
     @classmethod
     def create(cls, data_dict):
         return cls(
+            uid=data_dict["uid"],
             name=data_dict["name"],
             email=data_dict["email"],
             )
