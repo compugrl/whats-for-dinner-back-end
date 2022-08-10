@@ -134,7 +134,7 @@ def get_user_menu_items(uid):
                 "id": "unkid" + str(i),
                 "menu_date": date_str,
                 "rhash": "unkrhash" + str(i),
-                "label": "Click search to find a recipe",
+                "label": "No menu item",
                 "image_url": "http://notfound.com",
                 "shareAs": "http://notfound.com"
             }
