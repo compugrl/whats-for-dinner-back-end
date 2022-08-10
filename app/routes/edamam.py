@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify, make_response
 import os
 from dotenv import load_dotenv
 import requests
+import json
 from ..helpers.helper_functions import parse_recipe
 
 load_dotenv()
@@ -73,3 +74,21 @@ def get_recipe():
 
     response = parse_recipe(first_response)
     return make_response(jsonify(response)), 200
+
+@edamam_bp.route("/<rhash>", methods=["GET"])
+def get_specific_recipe(rhash):
+    params = {
+        "app_key": recipe_key,
+        "app_id": recipe_app,
+        "type": "public",
+        "format": "json",
+        }
+
+    # response = requests.get(
+    response = requests.get(
+        f"https://api.edamam.com/api/recipes/v2/{rhash}",
+        params
+    )
+
+    data = response.json()
+    return data

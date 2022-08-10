@@ -21,11 +21,14 @@ def parse_recipe(input_data):
         start_pos = uri.find("#") + 8
         rhash = uri[start_pos::]
 
+        ingredients = parse_ingredients(hit)
+
         recipe_dict = {
             "rhash": rhash,
             "label": label,
             "image_url": image_url,
             "shareAs": shareAs,
+            "ingredients": ingredients
         }
         recipe_list.append(recipe_dict)
 
