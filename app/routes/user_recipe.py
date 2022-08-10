@@ -117,16 +117,27 @@ def get_user_menu_items(uid):
     date_str = start_date
 
     for i in range(7):  
-        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str)).first()
+        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str)).first()  
 
         if user_recipe:
+            recipe = Recipe.query.get(user_recipe.rhash)
             user_recipe_dict = {
             "id": user_recipe.id,
             "menu_date": user_recipe.menu_date,
             "rhash": user_recipe.rhash,
+            "label": recipe.label,
+            "image_url": recipe.image_url,
+            "shareAs": recipe.shareAs
             } 
         else: 
-            user_recipe_dict = {}
+            user_recipe_dict = {
+                "id": "unkid" + str(i),
+                "menu_date": date_str,
+                "rhash": "unkrhash" + str(i),
+                "label": "Click search to find a recipe",
+                "image_url": "http://notfound.com",
+                "shareAs": "http://notfound.com"
+            }
         recipe_list.append(user_recipe_dict)
 
         date_dt = datetime.strptime(date_str, '%b %d %Y')
