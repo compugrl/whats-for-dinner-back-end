@@ -96,16 +96,18 @@ def get_user_favorite_recipes(uid):
     recipe_list = []
     user_recipes = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.favorite == True))
 
-    for recipe in user_recipes:
-        recipe_dict = {
-            "favorite": recipe.favorite,
-            "id": recipe.id,
-            "rhash": recipe.rhash,
-            "uid": recipe.uid,
-            "label": recipe.label
-        }
+    if user_recipes:
+        for recipe in user_recipes:
+            recipe = Recipe.query.get(user_recipes.rhash)
+            recipe_dict = {
+                "favorite": recipe.favorite,
+                "id": recipe.id,
+                "rhash": recipe.rhash,
+                "uid": recipe.uid,
+                "label": recipe.label
+            }
 
-        recipe_list.append(recipe_dict)
+            recipe_list.append(recipe_dict)
     db.session.commit()
 
     return make_response(jsonify(recipe_list)), 200
