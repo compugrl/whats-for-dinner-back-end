@@ -50,9 +50,9 @@ def update_user_recipe(id):
     request_body = request.get_json()
 
     if "favorite" in request_body:
-        user_recipe.favorite = request_body["favorite"]        
+        user_recipe.favorite = request_body["favorite"]
     if "menu_date" in request_body:
-        user_recipe.menu_date = request_body["menu_date"]  
+        user_recipe.menu_date = request_body["menu_date"]
     db.session.commit()
 
     updatedUserRecipe = {
@@ -101,7 +101,8 @@ def get_user_favorite_recipes(uid):
             "favorite": recipe.favorite,
             "id": recipe.id,
             "rhash": recipe.rhash,
-            "uid": recipe.uid
+            "uid": recipe.uid,
+            "label": recipe.label
         }
 
         recipe_list.append(recipe_dict)
@@ -116,8 +117,8 @@ def get_user_menu_items(uid):
     start_date = request.args.get("start_date")
     date_str = start_date
 
-    for i in range(7):  
-        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str)).first()  
+    for i in range(7):
+        user_recipe = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.menu_date == date_str)).first()
 
         if user_recipe:
             recipe = Recipe.query.get(user_recipe.rhash)
@@ -128,8 +129,8 @@ def get_user_menu_items(uid):
             "label": recipe.label,
             "image_url": recipe.image_url,
             "shareAs": recipe.shareAs
-            } 
-        else: 
+            }
+        else:
             user_recipe_dict = {
                 "id": "unkid" + str(i),
                 "menu_date": date_str,
