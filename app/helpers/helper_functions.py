@@ -36,9 +36,10 @@ def parse_recipe(input_data):
 
 def parse_ingredients(input_data):
     ingredient_list = []
+    input_data = input_data.json()
     ingredients = input_data["recipe"]["ingredients"]
     for ingredient in ingredients:
-        food = ingredient["text"]
+        food = ingredient["food"]
         ingredient_list.append(food)
 
     return ingredient_list
