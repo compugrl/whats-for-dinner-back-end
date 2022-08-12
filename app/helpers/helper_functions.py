@@ -9,8 +9,7 @@ from sqlalchemy import and_
 def parse_recipe(input_data):
     recipe_list = []
     recipe_dict = {}
-    data = jsonify(input_data)
-    hits = data["hits"]
+    hits = input_data["hits"]
 
     for hit in hits:
         label = hit["recipe"]["label"]
@@ -21,14 +20,11 @@ def parse_recipe(input_data):
         start_pos = uri.find("#") + 8
         rhash = uri[start_pos::]
 
-        ingredients = parse_ingredients(hit)
-
         recipe_dict = {
             "rhash": rhash,
             "label": label,
             "image_url": image_url,
-            "shareAs": shareAs,
-            "ingredients": ingredients
+            "shareAs": shareAs
         }
         recipe_list.append(recipe_dict)
 

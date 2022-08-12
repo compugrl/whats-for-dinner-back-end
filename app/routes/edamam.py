@@ -3,8 +3,7 @@ from flask import Blueprint, request, jsonify, make_response
 import os
 from dotenv import load_dotenv
 import requests
-import json
-from ..helpers.helper_functions import parse_ingredients, parse_recipe
+from ..helpers.helper_functions import parse_recipe, parse_ingredients
 
 load_dotenv()
 
@@ -16,12 +15,12 @@ recipe_app = os.environ.get("RECIPE_APP")
 @edamam_bp.route("", methods=["GET"])
 def get_recipe():
     params = {
-        "app_key": recipe_key,
-        "app_id": recipe_app,
-        "type": "public",
-        "mealType": "Dinner",
-        "random": "true",
-        "format": "json"
+        "app_key": recipe_key, 
+        "app_id": recipe_app, 
+        "type": "public", 
+        "mealType": "Dinner", 
+        "random": "true", 
+        "format": "json",
         }
 
     diet_lbl = 'diet'
@@ -38,7 +37,7 @@ def get_recipe():
     if ingr_limit:
         params["ingr"] = f'1-{ingr_limit}'
 
-    time = request.args.get("time")
+    time = request.args.get("time")    
     if time:
         params["time"] = time
 
@@ -64,13 +63,13 @@ def get_recipe():
             cuisine_lbl = 'cuisines'
             params[cuisine_lbl] = cuisine_val
 
-    response = requests.get(
-        "https://api.edamam.com/api/recipes/v2",
+    response = requests.get(f"https://api.edamam.com/api/recipes/v2",
         params
-    )
+    )    
 
     data = response.json()
-    return data
+    new_data = parse_recipe(data)
+    return make_response(jsonify(new_data)), 200
 
 @edamam_bp.route("/<rhash>", methods=["GET"])
 def get_specific_recipe(rhash):
@@ -78,15 +77,9 @@ def get_specific_recipe(rhash):
         "app_key": recipe_key,
         "app_id": recipe_app,
         "type": "public",
-        "format": "json",
-        "field": "uri",
-        "field": "shareAs",
-        "field": "label",
-        "field": "image",
-        "field": "ingredients"
+        "format": "json"
         }
 
-    # response = requests.get(
     response = requests.get(
         f"https://api.edamam.com/api/recipes/v2/{rhash}",
         params
