@@ -2,7 +2,7 @@ from app import db
 
 class Recipe(db.Model):
     rhash = db.Column(db.String, primary_key=True)
-    shareAs = db.Column(db.String, nullable=False)
+    uri = db.Column(db.String, nullable=False)
     label = db.Column(db.String, nullable=False)
     image_url = db.Column(db.String)    
     user = db.relationship("User", secondary="user_recipe")
@@ -10,7 +10,7 @@ class Recipe(db.Model):
     def to_dict(self):
         response = {
             "rhash": self.rhash,
-            "shareAs": self.shareAs,
+            "uri": self.uri,
             "label": self.label,
             "image_url": self.image_url,
             }
@@ -20,7 +20,7 @@ class Recipe(db.Model):
     def create(cls, data_dict):
         return cls(
             rhash=data_dict["rhash"],
-            shareAs=data_dict["shareAs"],
+            uri=data_dict["uri"],
             label=data_dict["label"],
             image_url=data_dict["image_url"],
             )

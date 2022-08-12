@@ -15,7 +15,7 @@ def parse_recipe(input_data):
     for hit in hits:
         label = hit["recipe"]["label"]
         image_url = hit["recipe"]["image"]
-        shareAs = hit["recipe"]["shareAs"]
+        uri = hit["recipe"]["uri"]
 
         uri = hit["recipe"]["uri"]
         start_pos = uri.find("#") + 8
@@ -27,7 +27,7 @@ def parse_recipe(input_data):
             "rhash": rhash,
             "label": label,
             "image_url": image_url,
-            "shareAs": shareAs,
+            "uri": uri,
             "ingredients": ingredients
         }
         recipe_list.append(recipe_dict)

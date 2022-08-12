@@ -53,8 +53,8 @@ def edit_recipe(rhash):
         recipe.label = request_body["label"]
     if "image_url" in request_body:
         recipe.image_tnail = request_body["image_url"]
-    if "shareAs" in request_body:
-        recipe.image_sm = request_body["shareAs"]
+    if "uri" in request_body:
+        recipe.image_sm = request_body["uri"]
     db.session.commit()
 
     return {"updated recipe": recipe.to_dict()}

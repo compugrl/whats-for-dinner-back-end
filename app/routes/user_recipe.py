@@ -127,7 +127,7 @@ def get_user_menu_items(uid):
             "rhash": user_recipe.rhash,
             "label": recipe.label,
             "image_url": recipe.image_url,
-            "shareAs": recipe.shareAs
+            "uri": recipe.uri
             } 
         else: 
             user_recipe_dict = {
@@ -136,7 +136,7 @@ def get_user_menu_items(uid):
                 "rhash": "unkrhash" + str(i),
                 "label": "No menu item",
                 "image_url": "http://notfound.com",
-                "shareAs": "http://notfound.com"
+                "uri": "http://notfound.com"
             }
         recipe_list.append(user_recipe_dict)
 

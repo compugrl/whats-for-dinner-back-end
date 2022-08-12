@@ -21,9 +21,10 @@ def get_recipe():
         "type": "public",
         "mealType": "Dinner",
         "random": "true",
-        "imageSize": "THUMBNAIL",
-        "imageSize": "REGULAR",
         "format": "json",
+        "field": "uri",
+        "field": "label",
+        "field": "image"
         }
 
     diet_lbl = 'diet'
@@ -82,6 +83,10 @@ def get_specific_recipe(rhash):
         "app_id": recipe_app,
         "type": "public",
         "format": "json",
+        "field": "uri",
+        "field": "label",
+        "field": "image",
+        "field": "ingredients"
         }
 
     # response = requests.get(
