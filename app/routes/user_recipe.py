@@ -98,7 +98,7 @@ def get_user_favorite_recipes(uid):
 
     if user_recipes:
         for item in user_recipes:
-            recipe = Recipe.query.get(user_recipes.rhash)
+            recipe = Recipe.query.get(item.rhash)
             recipe_dict = {
                 "favorite": item.favorite,
                 "id": item.id,
