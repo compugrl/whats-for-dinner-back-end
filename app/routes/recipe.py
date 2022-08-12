@@ -43,18 +43,3 @@ def delete_recipe(rhash):
     db.session.commit()
 
     return jsonify({'success': f'Recipe {recipe.label} successfully deleted'})
-
-@recipe_bp.route("/<rhash>", methods=["PATCH"])
-def edit_recipe(rhash):
-    recipe = validate_recipe(rhash)
-    request_body = request.get_json()
-
-    if "label" in request_body:
-        recipe.label = request_body["label"]
-    if "image_url" in request_body:
-        recipe.image_tnail = request_body["image_url"]
-    if "uri" in request_body:
-        recipe.image_sm = request_body["uri"]
-    db.session.commit()
-
-    return {"updated recipe": recipe.to_dict()}

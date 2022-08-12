@@ -84,6 +84,7 @@ def get_specific_recipe(rhash):
         "type": "public",
         "format": "json",
         "field": "uri",
+        "field": "shareAs",
         "field": "label",
         "field": "image",
         "field": "ingredients"
