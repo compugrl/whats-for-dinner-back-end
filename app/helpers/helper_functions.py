@@ -9,8 +9,8 @@ from sqlalchemy import and_
 def parse_recipe(input_data):
     recipe_list = []
     recipe_dict = {}
-    input_data = input_data.json()
-    hits = input_data["hits"]
+    data = jsonify(input_data)
+    hits = data["hits"]
 
     for hit in hits:
         label = hit["recipe"]["label"]

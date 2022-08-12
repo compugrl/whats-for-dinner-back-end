@@ -21,10 +21,7 @@ def get_recipe():
         "type": "public",
         "mealType": "Dinner",
         "random": "true",
-        "format": "json",
-        "field": "uri",
-        "field": "label",
-        "field": "image"
+        "format": "json"
         }
 
     diet_lbl = 'diet'
@@ -67,14 +64,13 @@ def get_recipe():
             cuisine_lbl = 'cuisines'
             params[cuisine_lbl] = cuisine_val
 
-    # response = requests.get(
-    first_response = requests.get(
+    response = requests.get(
         "https://api.edamam.com/api/recipes/v2",
         params
     )
 
-    response = parse_recipe(first_response)
-    return make_response(jsonify(response)), 200
+    data = response.json()
+    return data
 
 @edamam_bp.route("/<rhash>", methods=["GET"])
 def get_specific_recipe(rhash):
