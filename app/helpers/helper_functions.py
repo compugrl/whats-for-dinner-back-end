@@ -31,12 +31,21 @@ def parse_recipe(input_data):
     return recipe_list
 
 def parse_ingredients(input_data):
+    food_dict = {}
     ingredient_list = []
     input_data = input_data.json()
     ingredients = input_data["recipe"]["ingredients"]
     for ingredient in ingredients:
-        food = ingredient["food"]
-        ingredient_list.append(food)
+        full_id = ingredient["foodId"]
+        id = full_id[5::]
+        food = ingredient["text"]
+
+        food_dict = {
+            "id": id,
+            "food": food
+        }
+
+        ingredient_list.append(food_dict)
 
     return ingredient_list
 
