@@ -131,7 +131,6 @@ def get_user_menu_items(uid):
             "menu_date": user_recipe.menu_date,
             "rhash": user_recipe.rhash,
             "label": recipe.label,
-            "image_url": recipe.image_url,
             "shareAs": recipe.shareAs
             }
         else:
@@ -140,7 +139,6 @@ def get_user_menu_items(uid):
                 "menu_date": date_str,
                 "rhash": "unkrhash" + str(i),
                 "label": "No menu item",
-                "image_url": "http://notfound.com",
                 "shareAs": "http://notfound.com"
             }
         recipe_list.append(user_recipe_dict)

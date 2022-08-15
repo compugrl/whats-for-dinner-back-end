@@ -13,7 +13,6 @@ def parse_recipe(input_data):
 
     for hit in hits:
         label = hit["recipe"]["label"]
-        image_url = hit["recipe"]["image"]
         shareAs = hit["recipe"]["shareAs"]
 
         uri = hit["recipe"]["uri"]
@@ -23,7 +22,6 @@ def parse_recipe(input_data):
         recipe_dict = {
             "rhash": rhash,
             "label": label,
-            "image_url": image_url,
             "shareAs": shareAs
         }
         recipe_list.append(recipe_dict)
@@ -61,7 +59,7 @@ def validate_recipe(rhash):
     recipe = Recipe.query.get(rhash)
 
     if not recipe:
-        return make_response(jsonify(f"Recipe {rhash} not found"), 404)
+        return abort(make_response(jsonify(f"Recipe {rhash} not found"), 404))
 
     return recipe
 
