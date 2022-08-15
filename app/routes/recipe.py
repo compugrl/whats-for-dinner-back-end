@@ -21,7 +21,7 @@ def get_all_recipes():
 
 @recipe_bp.route("/<rhash>", methods=["GET"])
 def get_one_recipe(rhash):
-    recipe = validate_recipe(rhash)
+    recipe = Recipe.query.get(rhash)
     if recipe:
         return {"recipe": recipe.to_dict()}
     else:
