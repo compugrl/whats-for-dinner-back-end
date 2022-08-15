@@ -22,8 +22,10 @@ def get_all_recipes():
 @recipe_bp.route("/<rhash>", methods=["GET"])
 def get_one_recipe(rhash):
     recipe = validate_recipe(rhash)
-
-    return {"recipe": recipe.to_dict()}
+    if recipe:
+        return {"recipe": recipe.to_dict()}
+    else:
+        return make_response(jsonify(f"Recipe {rhash} not found"), 404)
 
 @recipe_bp.route("", methods=["POST"])
 def create_recipe():
