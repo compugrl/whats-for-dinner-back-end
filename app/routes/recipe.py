@@ -25,7 +25,7 @@ def get_one_recipe(rhash):
     if recipe:
         return {"recipe": recipe.to_dict()}
     else:
-        return make_response(jsonify(f"Recipe {rhash} not found"), 404)
+        return f"Recipe {rhash} not found"
 
 @recipe_bp.route("", methods=["POST"])
 def create_recipe():
