@@ -74,6 +74,24 @@ def get_recipes_per_user(uid):
 
     return make_response(jsonify(recipes_info)), 200
 
+@ur_bp.route("/user/<uid>/recipe/<rhash>", methods=["GET"])
+def get_id_specific_user_recipe(uid, rhash):
+    user = validate_user(uid)
+    recipe = validate_recipe(rhash)
+    if recipe:
+        user_recipes = UserRecipe.query.filter(and_(UserRecipe.uid == uid, UserRecipe.rhash == rhash)).first()
+    
+        if user_recipes:
+            id = user_recipes.id
+            db.session.commit()
+            urid = {
+                "id": id
+            }
+        else:
+            urid = {"id": 0}
+            
+    return make_response(jsonify(urid)), 200
+
 @ur_bp.route("/<id>", methods=["GET"])
 def get_specific_user_recipe(id):
     user_recipe = validate_user_recipe(id)
