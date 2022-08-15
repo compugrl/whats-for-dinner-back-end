@@ -100,11 +100,13 @@ def get_user_favorite_recipes(uid):
         for item in user_recipes:
             recipe = Recipe.query.get(item.rhash)
             recipe_dict = {
-                "favorite": item.favorite,
                 "id": item.id,
+                "favorite": item.favorite,
                 "rhash": item.rhash,
                 "uid": item.uid,
-                "label": recipe.label
+                "menu_date": item.menu_date,
+                "label": recipe.label,                
+                "shareAs": recipe.shareAs
             }
 
             recipe_list.append(recipe_dict)

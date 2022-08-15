@@ -61,7 +61,7 @@ def validate_recipe(rhash):
     recipe = Recipe.query.get(rhash)
 
     if not recipe:
-        return abort(make_response(jsonify(f"Recipe {rhash} not found"), 404))
+        return make_response(jsonify(f"Recipe {rhash} not found"), 404)
 
     return recipe
 
